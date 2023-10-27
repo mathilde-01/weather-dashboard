@@ -53,6 +53,19 @@ function fetchCurrent(lat, lon) {
     .then(function (data) {
       console.log(data.main.temp); //current temp
     });
+
+  //create/ show current search
+  var searchInput = $("#inputCity").value;
+  var currentSearchEl = cityBox.createElement
+  var currentDay = moment().format("M/D/YYYY");
+  console.log(currentDay)
+
+  currentTitle.text(`${cityName} (${currentDay})`)
+
+  searchInput.append(currentSearchEl);
 }
 
-// fetchButton.addEventListener("click", citySearch);
+// fetchButton.addEventListener("click", fetchCurrent);
+
+
+//local storage 
