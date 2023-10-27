@@ -5,7 +5,7 @@ var cityName = "";
 var fetchButton = document.getElementById("fetch-button");
 var cityBox = document.querySelector(".boxCity");
 
-function weatherApi(name) {
+function weatherApi() {
   var weatherUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${name}&appid=${ApiKey}`;
 
   fetch(weatherUrl)
@@ -17,8 +17,8 @@ function weatherApi(name) {
       var lat = data[0].lat;
       var lon = data[0].lon;
       console.log(lat, lon);
-      return fetchCurrent(lat, lon)
-      // .then(function () { // this should be in fetchCurrent 
+      return fetchCurrent(lat, lon);
+      // .then(function () { // this should be in fetchCurrent
       //   return fetchCurrent(lat, lon);
       // });
     })
@@ -32,25 +32,61 @@ weatherApi("philadelphia");
 // Current search box
 function fetchCurrent(lat, lon) {
   return fetch(
-    `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&units=imperial&lon=${lon}&appid=${ApiKey}`
+    `https://api.openweathermap.org/data/2.5/weather?=${cityName}&lat=${lat}&units=imperial&lon=${lon}&appid=${ApiKey}`
   )
     .then(function (response) {
       return response.json();
     })
     .then(function (data) {
-      console.log(data.main.temp); //current temp
+      console.log(data)
+      // current city
+      var currentCityInput = $("#inputCity").val("")
+      var currentCityEl = document.getElementById("inputCity")
+      console.log(currentCityInput)
+      currentCityEl.textContent = currentCityInput
+      // create current day
+      var currentDay = moment().format("M/D/YYYY")
+      console.log(currentDay)
+      var day = document.createElement('h2')
+      day.textContent = currentDay
+      cityBox.appendChild(day)
+      // create current temp
+      var temp = document.createElement('p')
+      temp.textContent = `\n`+`Temp:${data.main.temp}`
+      cityBox.appendChild(temp)
+      // create current wind 
+      var wind = document.createElement('p')
+      wind.textContent = `\n`+`Wind:${data.wind.speed}` + `MPH`
+      cityBox.appendChild(wind)
+      // create current temp
+      var humid = document.createElement('p')
+      humid.textContent = `\n`+`Humidity:${data.main.humidity}`+ `%`
+      cityBox.appendChild(humid)
+      
+      //create current humidity
+
     });
 
-  //create/ show current search
-  // var searchInput = $("#inputCity").value;
-  // var currentSearchEl = cityBox.createElement
-  // var currentDay = moment().format("M/D/YYYY");
-  // console.log(currentDay)
-
-  // currentTitle.text(`${cityName} (${currentDay})`)
-
-  // searchInput.append(currentSearchEl);
+ 
 }
+
+// called when the search form is submitted
+$(".form").on("submit", function() {
+  event.preventDefault();
+  
+  // get name of city searched
+  var cityName = $("#inputCity").val();
+
+  if (cityName === "" || cityName == null) {
+      // send alert if search input is empty when submitted
+      alert("Please enter name of city.");
+      event.preventDefault();
+  } else {
+      // if cityName is valid, add it to search history list and display its weather conditions
+      fetchCurrent();
+      fetchForecast();
+  }
+});
 
 // fetchButton.addEventListener("click", fetchCurrent);
 
@@ -70,6 +106,4 @@ function fetchForecast(lat, lon) {
     });
 }
 
-
-
-//local storage 
+//local storage

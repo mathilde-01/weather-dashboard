@@ -44,8 +44,8 @@ main {
 
 .boxCity {
     outline: 1px solid black;
-    height: 150px;
-    width: 50%;
+    height: 250px;
+    width: 70%;
     display: flex;
     float: right;
 }
