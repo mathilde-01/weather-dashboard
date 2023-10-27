@@ -6,6 +6,7 @@ var fetchButton = document.getElementById("fetch-button");
 var cityBox = document.querySelector(".boxCity");
 var lat = "";
 var lon = "";
+var savedSearches = [];
 
 function weatherApi(cityName) {
   var weatherUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&appid=${ApiKey}`;
@@ -29,7 +30,6 @@ function weatherApi(cityName) {
       console.log(data); //grab data
     });
 }
-// weatherApi(cityName);
 
 // Current search box
 function fetchCurrent(lat, lon) {
@@ -42,10 +42,9 @@ function fetchCurrent(lat, lon) {
     .then(function (data) {
       console.log(data);
       // current city
-      var currentCityInput = $("#inputCity").val("");
-      var currentCityEl = document.getElementById("inputCity");
-      console.log(currentCityInput);
-      currentCityEl.textContent = currentCityInput;
+      var currentCity = document.createElement("h2");
+      currentCity.textContent = `${data.name}`;
+      cityBox.appendChild(currentCity);
       // create current day
       var currentDay = moment().format("M/D/YYYY");
       console.log(currentDay);
@@ -64,6 +63,8 @@ function fetchCurrent(lat, lon) {
       var humid = document.createElement("p");
       humid.textContent = `\n` + `Humidity:${data.main.humidity}` + `%`;
       cityBox.appendChild(humid);
+
+      fetchForecast(lat, lon);
     });
 }
 
@@ -81,7 +82,6 @@ $(".form").on("submit", function () {
   } else {
     // if cityName is valid, add it to search history list and display its weather conditions
     weatherApi(cityName);
-    fetchForecast(cityName);
     //local Storage code
   }
 });
@@ -101,10 +101,34 @@ function fetchForecast(lat, lon) {
       for (var i = 0; i < data.list.length; i = i + 8) {
         console.log(data.list[i]);
         var temp = document.createElement("p");
-        temp.textContent = `\n` + `Temp:${data.main.temp}`;
+        temp.textContent = `Temp:${data.main.temp}`;
         cityBox.appendChild(temp);
       }
     });
 }
 
 //local storage
+var searchList = function (cityName) {
+  // create entry with city name
+  var searchHistoryEntry = $("<button>");
+  var searchHistoryContainer = document.querySelector(
+    ".search-history-container"
+  );
+  searchHistoryEntry.text(cityName);
+  searchHistoryContainer.append(searchHistoryEntry);
+
+  if (savedSearches.length > 0) {
+    // update savedSearches array with previously saved searches
+    var SavedSearches = localStorage.getItem("");
+    savedSearches = JSON.parse();
+  }
+
+  // add city name to array of saved searches
+  savedSearches.push(cityName);
+  localStorage.setItem("savedSearches", JSON.stringify(savedSearches));
+
+  // reset search input
+  $("#inputCity").val("");
+
+  searchList();
+};
