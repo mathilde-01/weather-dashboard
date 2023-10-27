@@ -1,12 +1,12 @@
 console.log("script", "connected");
 
 var ApiKey = "5baa3eb3f1fb49cff1d20f45856a9452";
-var cityName = "Philadelphia";
+var cityName = "";
 var fetchButton = document.getElementById("fetch-button");
 var cityBox = document.querySelector("boxCity");
 
-function weatherApi() {
-  var weatherUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&appid=${ApiKey}`;
+function weatherApi(name) {
+  var weatherUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${name}&appid=${ApiKey}`;
 
   fetch(weatherUrl)
     .then(function (response) {
@@ -16,50 +16,43 @@ function weatherApi() {
     .then(function (data) {
       var lat = data[0].lat;
       var lon = data[0].lon;
-      // console.log(lat, lon);
-      return [lat, lon];
+      console.log(lat, lon);
+      return fetchForecast(lat, lon).then(function () {
+        return fetchCurrent(lat, lon);
+      });
     })
 
-    .then(function (coordinates) {
-      console.log(coordinates);
-      return fetch(
-        `https://api.openweathermap.org/data/2.5/forecast?lat=${coordinates[0]}&lon=${coordinates[1]}&appid=${ApiKey}`
-      );
-    })
-    .then(function (response) {
-      return response.json();
-    })
     .then(function (data) {
       console.log(data); //grab data
     });
 }
-weatherApi();
+weatherApi("philadelphia");
 
-function citySearch() {
-  var weatherUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&appid=${ApiKey}`;
-
-  fetch(weatherUrl)
+function fetchForecast(lat, lon) {
+  return fetch(
+    `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${ApiKey}`
+  )
     .then(function (response) {
       return response.json();
     })
-
-    .then(function (cityName) {
-      // console.log(cityName)
-      var cityName = data[0].city;
-
-      var cityBoxTitle = document.createElement("h2"); //create
-      cityBoxTitle.textContent = cityName; //text
-      cityBox.appendChild(cityBoxTitle); // append
+    .then(function (data) {
+      console.log(data);
+      for (var i = 0; i < data.list.length; i = i + 8) {
+        console.log(data.list[i]);
+      }
     });
-  // .then(function (data) {
-  //   var wind = data[0].list[0].wind;
-  //   console.log(wind);
-  //   return wind;
-  // });
 }
-citySearch();
+
+function fetchCurrent(lat, lon) {
+  return fetch(
+    `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&units=imperial&lon=${lon}&appid=${ApiKey}`
+  )
+    .then(function (response) {
+      return response.json();
+    })
+    .then(function (data) {
+      console.log(data.main.temp); //current temp
+    });
+}
+
 // fetchButton.addEventListener("click", citySearch);
-
-// 1 fetch: make a call to the geocoding api url with the city name, and get coordinates from that response
-
-// 2 fetch: using the coordinates from the call to geocoding, make a call to the forecase url

@@ -3,7 +3,6 @@ body {
     margin: 0;
 }
 
-
 .navbar a {
     color: white;
     font-weight: bold;
@@ -13,6 +12,7 @@ body {
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
+    background-image: linear-gradient(to right, rgb(41, 52, 207), darkblue);
 }
 
 aside {
@@ -22,6 +22,7 @@ aside {
     height: 100%;
     flex-wrap: wrap;
     flex-direction: column;
+    padding-left: 15px;
 }
 
 .btn{
@@ -32,8 +33,7 @@ main {
     display: flex;
     flex-wrap: wrap;
     float: right;
-    width: 950px;
-    height: 150%;
+    width: 70%;
 }
 
 .cityBtn {
@@ -53,4 +53,12 @@ main {
 .forecast-container{
     display: flex;
     float: right;
+    flex-wrap: nowrap;
 }
+
+.card-body{
+    background-color: rgb(2, 2, 86);
+    color: white;
+    margin: 3px;
+}
+
