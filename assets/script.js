@@ -5,8 +5,8 @@ var cityName = "";
 var fetchButton = document.getElementById("fetch-button");
 var cityBox = document.querySelector(".boxCity");
 
-function weatherApi() {
-  var weatherUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${name}&appid=${ApiKey}`;
+function weatherApi(cityName) {
+  var weatherUrl = `https://api.openweathermap.org/geo/1.0/direct?q=${cityName}&appid=${ApiKey}`;
 
   fetch(weatherUrl)
     .then(function (response) {
@@ -27,7 +27,7 @@ function weatherApi() {
       console.log(data); //grab data
     });
 }
-weatherApi("philadelphia");
+// weatherApi(cityName);
 
 // Current search box
 function fetchCurrent(lat, lon) {
@@ -58,15 +58,12 @@ function fetchCurrent(lat, lon) {
       var wind = document.createElement('p')
       wind.textContent = `\n`+`Wind:${data.wind.speed}` + `MPH`
       cityBox.appendChild(wind)
-      // create current temp
+      // create current humidity
       var humid = document.createElement('p')
       humid.textContent = `\n`+`Humidity:${data.main.humidity}`+ `%`
       cityBox.appendChild(humid)
-      
-      //create current humidity
-
+    
     });
-
  
 }
 
@@ -83,8 +80,9 @@ $(".form").on("submit", function() {
       event.preventDefault();
   } else {
       // if cityName is valid, add it to search history list and display its weather conditions
-      fetchCurrent();
-      fetchForecast();
+      fetchCurrent(cityName);
+      fetchForecast(cityName);
+      weatherApi(cityName);
   }
 });
 
@@ -102,6 +100,9 @@ function fetchForecast(lat, lon) {
       console.log(data);
       for (var i = 0; i < data.list.length; i = i + 8) {
         console.log(data.list[i]);
+        var temp = document.createElement('p')
+      temp.textContent = `\n`+`Temp:${data.main.temp}`
+      cityBox.appendChild(temp)
       }
     });
 }
