@@ -30,6 +30,7 @@ aside {
 }
 main {
     padding-top: 20px;
+    margin-right: 200px;
     display: flex;
     flex-wrap: wrap;
     float: right;
@@ -44,13 +45,15 @@ main {
 
 .boxCity {
     outline: 1px solid black;
-    height: 250px;
+    height: 300px;
     width: 70%;
     display: flex;
     float: right;
+    padding: 25px;
 }
 
 .forecast-container{
+    padding-top: 20px;
     display: flex;
     float: right;
     flex-wrap: nowrap;
@@ -60,5 +63,16 @@ main {
     background-color: rgb(2, 2, 86);
     color: white;
     margin: 3px;
+}
+
+img {
+    width: 40px;
+    height: 40px;
+}
+
+button {
+    border: none;
+    margin: 4px;
+    border-radius: 5px;
 }
 

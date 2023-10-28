@@ -43,7 +43,7 @@ function fetchCurrent(lat, lon) {
       console.log(data);
       // current city
       cityBox.innerHTML = "";
-      var currentCity = document.createElement("h6");
+      var currentCity = document.createElement("h3");
       currentCity.textContent = `${data.name}`;
       cityBox.appendChild(currentCity);
       // create current day
@@ -52,6 +52,7 @@ function fetchCurrent(lat, lon) {
       var day = document.createElement("p");
       day.textContent = currentDay;
       cityBox.appendChild(day);
+      // icon
       var imgIcon = document.createElement("img");
       imgIcon.setAttribute(
         "src",
@@ -60,15 +61,15 @@ function fetchCurrent(lat, lon) {
       cityBox.appendChild(imgIcon);
       // create current temp
       var temp = document.createElement("p");
-      temp.textContent = `\n` + `Temp:${data.main.temp}`;
+      temp.textContent = `\n` + `Temp: ${data.main.temp}`;
       cityBox.appendChild(temp);
       // create current wind
       var wind = document.createElement("p");
-      wind.textContent = `\n` + `Wind:${data.wind.speed}` + `MPH`;
+      wind.textContent = `\n` + `Wind: ${data.wind.speed}` + `MPH`;
       cityBox.appendChild(wind);
       // create current humidity
       var humid = document.createElement("p");
-      humid.textContent = `\n` + `Humidity:${data.main.humidity}` + `%`;
+      humid.textContent = `\n` + `Humidity: ${data.main.humidity}` + `%`;
       cityBox.appendChild(humid);
 
       fetchForecast(lat, lon);
@@ -87,13 +88,14 @@ $(".form").on("submit", function () {
     alert("Please enter name of city.");
     event.preventDefault();
   } else {
-    // if cityName is valid, add it to search history list and display its weather conditions
+    // if cityName is valid, add it to search history list and display weather
     weatherApi(cityName);
-    //local Storage code
+    //local Storage
     var previousSearch = JSON.parse(localStorage.getItem("weatherApi")) || [];
     previousSearch.push(cityName);
     localStorage.setItem("weatherApi", JSON.stringify(previousSearch));
     $("#inputCity").val("");
+    searchList();
   }
 });
 
@@ -112,31 +114,31 @@ function fetchForecast(lat, lon) {
       for (var i = 0; i < data.list.length; i = i + 8) {
         console.log(data.list[i]);
         cardFiveDay[j].innerHTML = "";
+        // day
         var currentDay = moment(data.list[i].dt_txt).format("M/D/YYYY");
         console.log(currentDay);
-        var day = document.createElement("h2");
+        var day = document.createElement("h4");
         day.textContent = currentDay;
         cardFiveDay[j].appendChild(day);
+        // icon
         var imgIcon = document.createElement("img");
         imgIcon.setAttribute(
           "src",
           `https://openweathermap.org/img/wn/${data.list[i].weather[0].icon}@2x.png`
         );
         cardFiveDay[j].appendChild(imgIcon);
-        var temp = document.createElement("p");
-        temp.textContent = `Temp:${data.list[i].main.temp}`;
-        cardFiveDay[j].appendChild(temp);
-        // create current day
         // create current temp
-
+        var temp = document.createElement("p");
+        temp.textContent = `Temp: ${data.list[i].main.temp}`;
+        cardFiveDay[j].appendChild(temp);
         // create current wind
         var wind = document.createElement("p");
-        wind.textContent = `\n` + `Wind:${data.list[i].wind.speed}` + `MPH`;
+        wind.textContent = `\n` + `Wind: ${data.list[i].wind.speed}` + `MPH`;
         cardFiveDay[j].appendChild(wind);
         // create current humidity
         var humid = document.createElement("p");
         humid.textContent =
-          `\n` + `Humidity:${data.list[i].main.humidity}` + `%`;
+          `\n` + `Humidity: ${data.list[i].main.humidity}` + `%`;
         cardFiveDay[j].appendChild(humid);
         j++;
       }
@@ -144,29 +146,32 @@ function fetchForecast(lat, lon) {
 }
 
 //local storage
-var searchList = function (savedCities) {
-  // create entry with city name
-  var searchHistoryEntry = $("<button>");
-  var searchHistoryContainer = document.querySelector(
-    ".search-history-container"
-  );
+var searchList = function () {
+  var previousSearch = JSON.parse(localStorage.getItem("weatherApi")) || [];
+  var searchHistoryContainer = $("#search-history-container");
+  searchHistoryContainer.html("");
+  for (let i = 0; i < previousSearch.length; i++) {
+    // create entry with city name
+    var searchHistoryEntry = $("<button>");
 
-  searchHistoryEntry.text(cityName);
-  console.log();
-  searchHistoryContainer.append(searchHistoryEntry);
-
-  fetchButton.addEventListener("click", savedCities()); //click event
-
-  if (savedSearches.length > 0) {
-    // update savedSearches array with previously saved searches
-    var savedSearches = localStorage.getItem("");
-    savedSearches = JSON.parse();
+    searchHistoryEntry.text(previousSearch[i]);
+    searchHistoryEntry.addClass(".searchList");
+    searchHistoryContainer.append(searchHistoryEntry);
   }
-
-  // add city name to array of saved searches
-  savedSearches.push(cityName);
-  localStorage.setItem("savedSearches", JSON.stringify(savedSearches));
-
-  // reset search input
-  $("#inputCity").val("");
+  // var buttonList = document.querySelectorAll(".searchList");
+  // buttonList.forEach((button) =>
+  //   button.addEventListener("click", buttonEventList)
+  // );
 };
+
+function buttonEventList(event) {
+  //event.preventDefault();
+  var city = event.target.textContent;
+  console.log(city, "On Click");
+}
+
+$(".search-history-container").on("click", ".searchList", function () {
+  console.log("JQuery", $(this).text());
+});
+
+searchList();
