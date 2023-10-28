@@ -90,6 +90,10 @@ $(".form").on("submit", function () {
     // if cityName is valid, add it to search history list and display its weather conditions
     weatherApi(cityName);
     //local Storage code
+    var previousSearch = JSON.parse(localStorage.getItem("weatherApi")) || [];
+    previousSearch.push(cityName);
+    localStorage.setItem("weatherApi", JSON.stringify(previousSearch));
+    $("#inputCity").val("");
   }
 });
 
