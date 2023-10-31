@@ -1,6 +1,6 @@
 # weather-dashboard
 [Link to deployed application]()
-![Portfolio screenshot]()
+![Application screenshot]()
 
 ## Description
 This application enables the user to to retrieve weather data for selected cities.

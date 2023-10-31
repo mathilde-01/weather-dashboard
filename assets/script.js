@@ -32,7 +32,7 @@ function weatherApi(cityName) {
 }
 
 // Current search box
-function fetchCurrent(lat, lon) {
+var fetchCurrent = function fetchCurrent(lat, lon) {
   return fetch(
     `https://api.openweathermap.org/data/2.5/weather?=${cityName}&lat=${lat}&units=imperial&lon=${lon}&appid=${ApiKey}`
   )
@@ -100,7 +100,7 @@ $(".form").on("submit", function () {
 });
 
 // weather cards
-function fetchForecast(lat, lon) {
+var fetchForecast = function fetchForecast(lat, lon) {
   return fetch(
     `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${ApiKey}&units=imperial`
   )
@@ -153,25 +153,26 @@ var searchList = function () {
   for (let i = 0; i < previousSearch.length; i++) {
     // create entry with city name
     var searchHistoryEntry = $("<button>");
-
+    // create/append
     searchHistoryEntry.text(previousSearch[i]);
     searchHistoryEntry.addClass(".searchList");
     searchHistoryContainer.append(searchHistoryEntry);
   }
-  // var buttonList = document.querySelectorAll(".searchList");
-  // buttonList.forEach((button) =>
-  //   button.addEventListener("click", buttonEventList)
-  // );
+  var buttonList = document.querySelectorAll(".searchList");
+  buttonList.forEach((button) =>
+  button.addEventListener("click", $("#search-history-container"))
+  );
 };
 
-function buttonEventList(event) {
-  //event.preventDefault();
-  var city = event.target.textContent;
-  console.log(city, "On Click");
-}
+$("#search-history-container").on("click", function() {
+  // 
+  var previousCityName = $(this).text();
+  fetchCurrent(previousCityName);
+  fetchForecast(previousCityName);
 
-$(".search-history-container").on("click", ".searchList", function () {
-  console.log("JQuery", $(this).text());
+  //
+  var previousCityClicked = $(this);
+  previousCityClicked.remove();
 });
 
 searchList();
