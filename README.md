@@ -1,6 +1,6 @@
 # weather-dashboard
-[Link to deployed application]()
-![Application screenshot]()
+[Link to deployed application](https://mathilde-01.github.io/weather-dashboard/)  
+![Application screenshot](./assets/img/weather-dashboard.png)  
 
 ## Description
 This application enables the user to to retrieve weather data for selected cities.
@@ -21,4 +21,5 @@ THEN I am presented with a 5-day forecast that displays the date, an icon repres
 WHEN I click on a city in the search history  
 THEN I am again presented with current and future conditions for that city  
 
-## Credits
+## Credits  
+[bootcampspot.com](https://bootcampspot.instructure.com/courses/4347/assignments/62275?module_item_id=1081419)  
