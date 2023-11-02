@@ -21,9 +21,6 @@ function weatherApi(cityName) {
       lon = data[0].lon;
       console.log(lat, lon);
       return fetchCurrent(lat, lon);
-      // .then(function () { // this should be in fetchCurrent
-      //   return fetchCurrent(lat, lon);
-      // });
     })
 
     .then(function (data) {
@@ -33,6 +30,7 @@ function weatherApi(cityName) {
 
 // Current search box
 var fetchCurrent = function fetchCurrent(lat, lon) {
+  console.log(lat, lon);
   return fetch(
     `https://api.openweathermap.org/data/2.5/weather?=${cityName}&lat=${lat}&units=imperial&lon=${lon}&appid=${ApiKey}`
   )
@@ -74,10 +72,10 @@ var fetchCurrent = function fetchCurrent(lat, lon) {
 
       fetchForecast(lat, lon);
     });
-}
+};
 
 // called when the search form is submitted
-$(".form").on("submit", function () {
+$(".form").on("submit", function (event) {
   event.preventDefault();
 
   // get name of city searched
@@ -143,13 +141,17 @@ var fetchForecast = function fetchForecast(lat, lon) {
         j++;
       }
     });
-}
+};
 
-//local storage
+//local storage & search list
 var searchList = function () {
   var previousSearch = JSON.parse(localStorage.getItem("weatherApi")) || [];
+  if (!fetchCurrent) {
+    return false;
+  }
   var searchHistoryContainer = $("#search-history-container");
   searchHistoryContainer.html("");
+
   for (let i = 0; i < previousSearch.length; i++) {
     // create entry with city name
     var searchHistoryEntry = $("<button>");
@@ -160,19 +162,24 @@ var searchList = function () {
   }
   var buttonList = document.querySelectorAll(".searchList");
   buttonList.forEach((button) =>
-  button.addEventListener("click", $("#search-history-container"))
+    button.addEventListener("click", previousSearch)
   );
 };
 
-$("#search-history-container").on("click", function() {
-  // 
-  var previousCityName = $(this).text();
-  fetchCurrent(previousCityName);
-  fetchForecast(previousCityName);
+// search history buttons
+// $("#search-history-container").click(function(event)){
+//   event.preventDefault();
+//   var previousCityName = $(this).text();
+//   fetchCurrent(previousCityName);
+//   fetchForecast(previousCityName);
 
-  //
-  var previousCityClicked = $(this);
-  previousCityClicked.remove();
-});
+//   var search = inputCity.value.trim();
+//   fetchCurrent(search);
+//   inputCity.value = "";
+
+//   //
+//   var previousCityClicked = $(this);
+//   previousCityClicked.remove();
+// };
 
 searchList();
