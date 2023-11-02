@@ -158,28 +158,11 @@ var searchList = function () {
     // create/append
     searchHistoryEntry.text(previousSearch[i]);
     searchHistoryEntry.addClass(".searchList");
+    searchHistoryEntry[0].addEventListener("click", () => {
+      weatherApi(previousSearch[i]);
+    });
     searchHistoryContainer.append(searchHistoryEntry);
   }
-  var buttonList = document.querySelectorAll(".searchList");
-  buttonList.forEach((button) =>
-    button.addEventListener("click", previousSearch)
-  );
 };
-
-// search history buttons
-// $("#search-history-container").click(function(event)){
-//   event.preventDefault();
-//   var previousCityName = $(this).text();
-//   fetchCurrent(previousCityName);
-//   fetchForecast(previousCityName);
-
-//   var search = inputCity.value.trim();
-//   fetchCurrent(search);
-//   inputCity.value = "";
-
-//   //
-//   var previousCityClicked = $(this);
-//   previousCityClicked.remove();
-// };
 
 searchList();
